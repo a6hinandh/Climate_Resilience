@@ -1,0 +1,217 @@
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  background: #e0f2f1; /* solid background */
+  padding: 80px 40px 40px 40px;
+}
+
+/* Header */
+.dashboard-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #0b6e4f;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+.dashboard-title {
+  font-size: 20px;
+  margin: 0 0 0 15px;
+}
+
+/* Profile + Dropdown */
+.profile-icon {
+  position: relative;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.dropdown-item {
+  padding: 10px 20px;
+  border: none;
+  background: white;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background: #f0f0f0;
+}
+
+.dropdown-item.logout {
+  color: red;
+  font-weight: bold;
+}
+
+/* Feature Grids */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.feature-card {
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 15px rgba(0,0,0,0.25);
+}
+
+.feature-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+  color: #0b6e4f;
+}
+
+.feature-label {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Weather Card */
+.weather-card {
+  width: 280px;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.2);
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column; /* ✅ Keep title on top, items below */
+}
+
+/* Weather Card Title */
+.weather-card .weather-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #084c61;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Weather Items Grid */
+.weather-items {
+  display: grid; /* ✅ Grid only for the items */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+/* Individual Weather Item */
+.weather-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 16px;
+}
+
+.weather-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+  color: #084c61;
+}
+
+.weather-item span {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.weather-item p {
+  margin: 0;
+  font-weight: bold;
+  font-size: 15px;
+  color: #222;
+}
+
+/* Weather Section Layout */
+.weather-section {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 20px;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+/* Weather History Grid */
+.weather-history {
+  flex: 1;
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+}
+
+.weather-history h3 {
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #084c61;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 15px;
+}
+
+.history-card {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.history-card:hover {
+  transform: scale(1.05);
+}
+
+.history-card .day {
+  font-weight: bold;
+  font-size: 14px;
+  display: block;
+}
+
+.history-card .temp {
+  font-size: 16px;
+  margin: 5px 0;
+  color: #0b6e4f;
+}
+
+.history-card .condition {
+  font-size: 13px;
+  color: #555;
+}
+

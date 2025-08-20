@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import LandingPage from './LandingPage.jsx'
+import Dashboard from './DashBoard.jsx'
 
 function App() {
   const [currentSeason, setCurrentSeason] = useState(0)
@@ -363,6 +364,7 @@ function App() {
         {particles.map((particle) => renderParticle(particle, currentSeasonData))}
         
         <LandingPage />
+        <Dashboard />
         
       </div>
     </>
