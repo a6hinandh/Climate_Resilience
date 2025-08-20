@@ -1,13 +1,22 @@
 import { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import LandingPage from './LandingPage.jsx'
+import Login from './Login.jsx'
+import Signup from './Signup.jsx'
+import './App.css'
 import Dashboard from './DashBoard.jsx'
 
-function App() {
+// Component to handle seasonal background based on route
+const SeasonalBackground = () => {
+  const location = useLocation()
   const [currentSeason, setCurrentSeason] = useState(0)
   const [nextSeason, setNextSeason] = useState(1)
   const [particles, setParticles] = useState([])
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [transitionProgress, setTransitionProgress] = useState(0)
+
+  // Only show seasonal background on landing page
+  const shouldShowSeasonalBackground = location.pathname === '/'
 
   // Seasons configuration with improved gradients
   const seasons = [
@@ -43,6 +52,8 @@ function App() {
 
   // Enhanced particle generation with better randomization
   useEffect(() => {
+    if (!shouldShowSeasonalBackground) return
+
     const generateParticles = () => {
       const season = seasons[currentSeason]
       const newParticles = []
@@ -77,10 +88,12 @@ function App() {
     }
 
     generateParticles()
-  }, [currentSeason])
+  }, [currentSeason, shouldShowSeasonalBackground])
 
   // Smooth season transition with progress tracking
   useEffect(() => {
+    if (!shouldShowSeasonalBackground) return
+
     const interval = setInterval(() => {
       setIsTransitioning(true)
       setTransitionProgress(0)
@@ -108,33 +121,122 @@ function App() {
     }, 7000) // Longer intervals for better viewing
 
     return () => clearInterval(interval)
-  }, [])
+  }, [shouldShowSeasonalBackground])
 
   // Create blended background during transitions
   const getBackgroundStyle = () => {
-  if (isTransitioning) {
-    return {
-      background: `linear-gradient(
-        to right,
-        ${seasons[currentSeason].gradient} ${(1 - transitionProgress) * 100}%,
-        ${seasons[nextSeason].gradient} ${transitionProgress * 100}%
-      )`
-    };
+    if (isTransitioning) {
+      return {
+        background: `linear-gradient(
+          to right,
+          ${seasons[currentSeason].gradient} ${(1 - transitionProgress) * 100}%,
+          ${seasons[nextSeason].gradient} ${transitionProgress * 100}%
+        )`
+      };
+    }
+    return { background: seasons[currentSeason].gradient };
   }
-  return { background: seasons[currentSeason].gradient };
-};
 
+  // Generate dynamic CSS for particles
+  useEffect(() => {
+    if (!shouldShowSeasonalBackground) return
+
+    const styleElement = document.getElementById('dynamic-particle-styles')
+    if (styleElement) {
+      styleElement.remove()
+    }
+
+    const newStyleElement = document.createElement('style')
+    newStyleElement.id = 'dynamic-particle-styles'
+    
+    const particleStyles = particles.map(particle => {
+      const season = seasons[currentSeason]
+      
+      if (season.particleType === 'snow') {
+        return `
+          @keyframes snowfall-${particle.id} {
+            0% {
+              transform: translateY(-10px) translateX(0px) rotate(0deg);
+              opacity: 0;
+            }
+            10% {
+              opacity: ${particle.opacity};
+            }
+            90% {
+              opacity: ${particle.opacity};
+            }
+            100% {
+              transform: translateY(100vh) translateX(${particle.drift}px) rotate(360deg);
+              opacity: 0;
+            }
+          }
+        `
+      } else if (season.particleType === 'rain') {
+        return `
+          @keyframes rainfall-${particle.id} {
+            0% {
+              transform: translateY(-10px) translateX(0px);
+              opacity: 0;
+            }
+            5% {
+              opacity: ${particle.opacity};
+            }
+            95% {
+              opacity: ${particle.opacity};
+            }
+            100% {
+              transform: translateY(100vh) translateX(${particle.drift * 0.3}px);
+              opacity: 0;
+            }
+          }
+        `
+      } else if (season.particleType === 'leaves') {
+        return `
+          @keyframes leaffall-${particle.id} {
+            0% {
+              transform: translateY(-10px) translateX(0px) rotate(0deg);
+              opacity: 0;
+            }
+            10% {
+              opacity: ${particle.opacity};
+            }
+            25% {
+              transform: translateY(25vh) translateX(${particle.drift * 0.3}px) rotate(90deg);
+            }
+            50% {
+              transform: translateY(50vh) translateX(${particle.drift * 0.6}px) rotate(180deg);
+            }
+            75% {
+              transform: translateY(75vh) translateX(${particle.drift}px) rotate(270deg);
+            }
+            90% {
+              opacity: ${particle.opacity * 0.7};
+            }
+            100% {
+              transform: translateY(100vh) translateX(${particle.drift * 1.2}px) rotate(360deg);
+              opacity: 0;
+            }
+          }
+        `
+      }
+      return ''
+    }).join('')
+
+    newStyleElement.textContent = particleStyles
+    document.head.appendChild(newStyleElement)
+  }, [particles, currentSeason, shouldShowSeasonalBackground])
 
   const renderParticle = (particle, season) => {
-    const baseStyle = {
-      position: 'absolute',
+    const baseClass = 'particle'
+    const seasonClass = `particle--${season.particleType}`
+    
+    const style = {
       left: `${particle.x}%`,
       top: `${particle.y}%`,
-      pointerEvents: 'none',
       animationDelay: `${particle.delay}s`,
       animationDuration: `${particle.duration}s`,
-      animationIterationCount: 'infinite',
-      opacity: particle.opacity
+      opacity: particle.opacity,
+      animationName: `${season.particleType}fall-${particle.id}`
     }
 
     switch (season.particleType) {
@@ -142,15 +244,12 @@ function App() {
         return (
           <div
             key={particle.id}
+            className={`${baseClass} ${seasonClass}`}
             style={{
-              ...baseStyle,
+              ...style,
               width: `${particle.size}px`,
               height: `${particle.size}px`,
-              background: `radial-gradient(circle, ${season.particleColor} 30%, rgba(255,255,255,0.8) 70%, transparent 100%)`,
-              borderRadius: '50%',
-              boxShadow: '0 0 6px rgba(255,255,255,0.8)',
-              animation: `snowfall-${particle.id} ${particle.duration}s linear infinite`,
-              '--drift': `${particle.drift}px`
+              background: `radial-gradient(circle, ${season.particleColor} 30%, rgba(255,255,255,0.8) 70%, transparent 100%)`
             }}
           />
         )
@@ -159,20 +258,12 @@ function App() {
         return (
           <div
             key={particle.id}
+            className={`${baseClass} ${seasonClass}`}
             style={{
-              ...baseStyle,
+              ...style,
               width: `${particle.size * 6}px`,
               height: `${particle.size * 6}px`,
-              background: `radial-gradient(circle, 
-                #ffeb3b 0%, 
-                rgba(255, 235, 59, 0.8) 30%, 
-                rgba(255, 193, 7, 0.5) 60%, 
-                rgba(255, 193, 7, 0.2) 80%,
-                transparent 100%)`,
-              borderRadius: '50%',
-              filter: 'blur(1px)',
-              animation: `sunray ${particle.duration}s ease-in-out infinite alternate`,
-              zIndex: 5
+              animationName: 'sunray'
             }}
           />
         )
@@ -181,19 +272,16 @@ function App() {
         return (
           <div
             key={particle.id}
+            className={`${baseClass} ${seasonClass}`}
             style={{
-              ...baseStyle,
+              ...style,
               width: '2px',
               height: `${particle.size * 4}px`,
               background: `linear-gradient(to bottom, 
                 transparent 0%, 
                 ${season.particleColor} 20%, 
                 ${season.particleColor} 80%, 
-                transparent 100%)`,
-              borderRadius: '1px',
-              filter: 'blur(0.3px)',
-              animation: `rainfall-${particle.id} ${particle.duration}s linear infinite`,
-              '--drift': `${particle.drift * 0.3}px`
+                transparent 100%)`
             }}
           />
         )
@@ -202,19 +290,11 @@ function App() {
         return (
           <div
             key={particle.id}
+            className={`${baseClass} ${seasonClass}`}
             style={{
-              ...baseStyle,
+              ...style,
               width: `${particle.size * 2}px`,
-              height: `${particle.size * 2.5}px`,
-              background: `linear-gradient(45deg, 
-                #ff6b35 0%, 
-                #f7931e 30%, 
-                #ff8c42 60%, 
-                #d2691e 100%)`,
-              clipPath: 'polygon(50% 0%, 85% 25%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 15% 25%)',
-              filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.3))',
-              animation: `leaffall-${particle.id} ${particle.duration}s ease-in-out infinite`,
-              '--drift': `${particle.drift}px`
+              height: `${particle.size * 2.5}px`
             }}
           />
         )
@@ -226,146 +306,51 @@ function App() {
 
   const currentSeasonData = seasons[currentSeason]
 
+  // Don't render anything if not on landing page
+  if (!shouldShowSeasonalBackground) {
+    return null
+  }
+
   return (
     <>
-      <style jsx global>{`
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-        
-        body, html {
-          margin: 0;
-          padding: 0;
-          overflow-x: hidden;
-        }
-        
-        ${particles.map(particle => {
-          const season = seasons[currentSeason]
-          
-          if (season.particleType === 'snow') {
-            return `
-              @keyframes snowfall-${particle.id} {
-                0% {
-                  transform: translateY(-10px) translateX(0px) rotate(0deg);
-                  opacity: 0;
-                }
-                10% {
-                  opacity: ${particle.opacity};
-                }
-                90% {
-                  opacity: ${particle.opacity};
-                }
-                100% {
-                  transform: translateY(100vh) translateX(var(--drift)) rotate(360deg);
-                  opacity: 0;
-                }
-              }
-            `
-          } else if (season.particleType === 'rain') {
-            return `
-              @keyframes rainfall-${particle.id} {
-                0% {
-                  transform: translateY(-10px) translateX(0px);
-                  opacity: 0;
-                }
-                5% {
-                  opacity: ${particle.opacity};
-                }
-                95% {
-                  opacity: ${particle.opacity};
-                }
-                100% {
-                  transform: translateY(100vh) translateX(var(--drift));
-                  opacity: 0;
-                }
-              }
-            `
-          } else if (season.particleType === 'leaves') {
-            return `
-              @keyframes leaffall-${particle.id} {
-                0% {
-                  transform: translateY(-10px) translateX(0px) rotate(0deg);
-                  opacity: 0;
-                }
-                10% {
-                  opacity: ${particle.opacity};
-                }
-                25% {
-                  transform: translateY(25vh) translateX(${particle.drift * 0.3}px) rotate(90deg);
-                }
-                50% {
-                  transform: translateY(50vh) translateX(${particle.drift * 0.6}px) rotate(180deg);
-                }
-                75% {
-                  transform: translateY(75vh) translateX(var(--drift)) rotate(270deg);
-                }
-                90% {
-                  opacity: ${particle.opacity * 0.7};
-                }
-                100% {
-                  transform: translateY(100vh) translateX(${particle.drift * 1.2}px) rotate(360deg);
-                  opacity: 0;
-                }
-              }
-            `
-          }
-          return ''
-        }).join('')}
-
-        @keyframes sunray {
-          0% {
-            opacity: 0.6;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.9;
-            transform: scale(1.05);
-          }
-          100% {
-            opacity: 0.8;
-            transform: scale(1.1);
-          }
-        }
-      `}</style>
-
-      <div style={{
-        minHeight: '100vh',
-        width: '100vw',
-        position: 'relative',
-        top: 0,
-        left: 0,
-        fontFamily: 'system-ui, -apple-system, sans-serif',
-        margin: 0,
-        padding: 0
-      }}>
-        {/* Base background layer */}
-        <div style={{
-          position: 'fixed',
-          zIndex: -1,
-          inset: 0,
-          ...getBackgroundStyle(),
-          transition: 'opacity 3s cubic-bezier(0.4, 0, 0.2, 1)'
-        }} />
-        
-        {/* Transition overlay */}
-        {isTransitioning && (
-          <div style={{
-            position: 'absolute',
-            inset: 0,
+      {/* Base background layer */}
+      <div 
+        className="background-layer"
+        style={getBackgroundStyle()}
+      />
+      
+      {/* Transition overlay */}
+      {isTransitioning && (
+        <div 
+          className="transition-overlay"
+          style={{
             background: seasons[nextSeason % seasons.length].gradient,
-            opacity: transitionProgress,
-            transition: 'opacity 0.1s ease-out'
-          }} />
-        )}
+            opacity: transitionProgress
+          }}
+        />
+      )}
 
-        {/* Particles */}
-        {particles.map((particle) => renderParticle(particle, currentSeasonData))}
-        
-        <LandingPage />
-      </div>
+      {/* Particles */}
+      {particles.map((particle) => renderParticle(particle, currentSeasonData))}
     </>
+  )
+}
+
+function App() {
+  return (
+    <Router>
+      <div className="app">
+        {/* Conditional seasonal background */}
+        <SeasonalBackground />
+        
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </div>
+    </Router>
   )
 }
 

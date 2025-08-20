@@ -1,0 +1,101 @@
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* App Container */
+.app {
+  min-height: 100vh;
+  width: 100vw;
+  position: relative;
+  top: 0;
+  left: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Background Layer */
+.background-layer {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  transition: opacity 3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Transition Overlay */
+.transition-overlay {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.1s ease-out;
+}
+
+/* Base Particle Styles */
+.particle {
+  position: absolute;
+  pointer-events: none;
+  animation-iteration-count: infinite;
+}
+
+/* Snow Particles */
+.particle--snow {
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+  animation-timing-function: linear;
+}
+
+/* Sun Particle */
+.particle--sun {
+  background: radial-gradient(circle, 
+    #ffeb3b 0%, 
+    rgba(255, 235, 59, 0.8) 30%, 
+    rgba(255, 193, 7, 0.5) 60%, 
+    rgba(255, 193, 7, 0.2) 80%,
+    transparent 100%);
+  border-radius: 50%;
+  filter: blur(1px);
+  z-index: 5;
+}
+
+/* Rain Particles */
+.particle--rain {
+  border-radius: 1px;
+  filter: blur(0.3px);
+  animation-timing-function: linear;
+}
+
+/* Leaf Particles */
+.particle--leaves {
+  background: linear-gradient(45deg, 
+    #ff6b35 0%, 
+    #f7931e 30%, 
+    #ff8c42 60%, 
+    #d2691e 100%);
+  clip-path: polygon(50% 0%, 85% 25%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 15% 25%);
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+  animation-timing-function: ease-in-out;
+}
+
+/* Sun Animation */
+@keyframes sunray {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}

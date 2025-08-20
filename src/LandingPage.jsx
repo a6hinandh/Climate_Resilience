@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Shield, Sun, Droplets, Sprout, Bot, MapPin, Users, Zap, ArrowRight, Play, Star, Menu, X } from 'lucide-react';
 import './LandingPage.css';
 
@@ -6,6 +7,7 @@ const LandingPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -34,49 +36,64 @@ const LandingPage = () => {
   return (
     <div className="landing-page">
       {/* Navigation */}
-      <nav className={`nav ${scrollY > 50 ? 'nav-scrolled' : ''}`}>
-        <div className="nav-container">
-          <div className="nav-content">
-            <div className="nav-brand">
-              <div className="nav-logo">
-                <Shield className="icon-lg icon-blue" />
-                <div className="nav-logo-pulse"></div>
-              </div>
-              <span className="nav-title">
-                Climate Guardian
-              </span>
-            </div>
-            
-            <div className="nav-links">
-              <a href="#features" className="nav-link">Features</a>
-              <a href="#demo" className="nav-link">Demo</a>
-              <a href="#about" className="nav-link">About</a>
-              <button className="nav-cta">
-                Get Started
-              </button>
-            </div>
-
-            <button 
-              className="nav-mobile-toggle"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X className="icon" /> : <Menu className="icon" />}
-            </button>
-          </div>
+{/* Navigation */}
+<nav className={`nav ${scrollY > 50 ? 'nav-scrolled' : ''}`}>
+  <div className="nav-container">
+    <div className="nav-content">
+      <div className="nav-brand">
+        <div className="nav-logo">
+          <Shield className="icon-lg icon-blue" />
+          <div className="nav-logo-pulse"></div>
         </div>
+        <span className="nav-title">
+          Climate Guardian
+        </span>
+      </div>
+      
+      <div className="nav-links">
+        <a href="#features" className="nav-link">Features</a>
+        <a href="#demo" className="nav-link">Demo</a>
+        <a href="#about" className="nav-link">About</a>
+        
+        {/* Auth buttons container */}
+        <div className="nav-auth-buttons">
+          <button className="nav-login-btn" onClick={() => navigate('/login')}>
+                  Log In
+                </button>
+                <button className="nav-signup-btn" onClick={() => navigate('/signup')}>
+                  Sign Up
+                </button>
+        </div>
+      </div>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="nav-mobile-menu">
-            <a href="#features">Features</a>
-            <a href="#demo">Demo</a>
-            <a href="#about">About</a>
-            <button className="nav-mobile-cta">
-              Get Started
-            </button>
-          </div>
-        )}
-      </nav>
+      <button 
+        className="nav-mobile-toggle"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+      >
+        {isMenuOpen ? <X className="icon" /> : <Menu className="icon" />}
+      </button>
+    </div>
+  </div>
+
+  {/* Mobile Menu */}
+  {isMenuOpen && (
+    <div className="nav-mobile-menu">
+      <a href="#features">Features</a>
+      <a href="#demo">Demo</a>
+      <a href="#about">About</a>
+      
+      {/* Mobile auth buttons */}
+      <div className="nav-mobile-auth-buttons">
+        <button className="nav-mobile-login-btn" onClick={() => navigate('/login')}>
+                Log In
+              </button>
+              <button className="nav-mobile-signup-btn" onClick={() => navigate('/signup')}>
+                Sign Up
+              </button>
+      </div>
+    </div>
+  )}
+</nav>
 
       {/* Hero Section */}
       <section className="hero-section">
