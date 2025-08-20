@@ -364,8 +364,6 @@ function App() {
         {particles.map((particle) => renderParticle(particle, currentSeasonData))}
         
         <LandingPage />
-        <Dashboard />
-        
       </div>
     </>
   )
