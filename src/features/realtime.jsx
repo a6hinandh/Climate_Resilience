@@ -23,7 +23,7 @@ const ClimateDataDashboard = () => {
   const [usingMockData, setUsingMockData] = useState(false);
 
   // API Key - using direct assignment as fallback
-  const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || "b802fad1e811283bad7482f0456b943e";
+  const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || "";
 
   // Determine time of day for dynamic theming
   useEffect(() => {
