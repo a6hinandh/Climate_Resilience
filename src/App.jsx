@@ -5,6 +5,11 @@ import Login from './Login.jsx'
 import Signup from './Signup.jsx'
 import './App.css'
 import Dashboard from './DashBoard.jsx'
+import Predictions from './features/Predictions.jsx'
+import Chatbot from './features/chatbot.jsx'
+import MapView from './features/mapview.jsx'
+import CommunityKnowledgeHub from './features/CommunityPage.jsx'
+import ClimateGamesApp from './features/ClimateQuiz.jsx'
 
 // Component to handle seasonal background based on route
 const SeasonalBackground = () => {
@@ -348,6 +353,11 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/predictions" element={<Predictions />}/>
+          <Route path="/chat" element={<Chatbot />}/>
+          <Route path="/map" element={<MapView />}/>
+          <Route path="/community" element={<CommunityKnowledgeHub/>}/>
+          <Route path="/game" element={<ClimateGamesApp />}/>
         </Routes>
       </div>
     </Router>
