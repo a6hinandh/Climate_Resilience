@@ -9,22 +9,23 @@ import {
 import "leaflet/dist/leaflet.css"
 import { Sun, Cloud, CloudRain, Wind, ChevronDown, ChevronUp, MapPin, Thermometer, Droplets, Gauge } from "lucide-react"
 import "./MapView.css"
-import L from "leaflet";
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import L from "leaflet"
 
-delete L.Icon.Default.prototype._getIconUrl;
+// Fix Leaflet default icons
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png"
+import markerIcon from "leaflet/dist/images/marker-icon.png"
+import markerShadow from "leaflet/dist/images/marker-shadow.png"
+
+delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
-});
+})
 
-
-const API_KEY = import.meta.env.VITE_OPENWEATHER_KEY;
-const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
-
+// Environment variables with fallbacks
+const API_KEY = import.meta.env.VITE_OPENWEATHER_KEY || process.env.VITE_OPENWEATHER_KEY
+const API_BASE = import.meta.env.VITE_API_BASE || process.env.VITE_API_BASE || "https://your-render-app.onrender.com"
 
 const ClickHandler = ({ setWeatherInfo }) => {
   useMapEvents({
@@ -32,21 +33,44 @@ const ClickHandler = ({ setWeatherInfo }) => {
       const { lat, lng } = e.latlng
       try {
         const res = await fetch(
-  `${API_BASE}/weather/coords?lat=${lat}&lon=${lng}`
-)
+          `${API_BASE}/weather/coords?lat=${lat}&lon=${lng}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`)
+        }
 
         const data = await res.json()
+        
+        if (data && data.main && data.weather && data.weather[0]) {
+          setWeatherInfo({
+            lat,
+            lng,
+            temp: data.main.temp,
+            humidity: data.main.humidity,
+            wind: data.wind?.speed || 0,
+            desc: data.weather[0].description,
+            location: data.name || 'Unknown Location',
+          })
+        }
+      } catch (err) {
+        console.error("Failed to fetch weather data:", err)
+        // Optionally show user-friendly error
         setWeatherInfo({
           lat,
           lng,
-          temp: data.main.temp,
-          humidity: data.main.humidity,
-          wind: data.wind.speed,
-          desc: data.weather[0].description,
-          location: data.name,
+          temp: 'N/A',
+          humidity: 'N/A',
+          wind: 'N/A',
+          desc: 'Weather data unavailable',
+          location: 'Unknown Location',
         })
-      } catch (err) {
-        console.error("Failed to fetch weather data:", err)
       }
     },
   })
@@ -63,14 +87,29 @@ const MapView = () => {
   })
   const [collapsed, setCollapsed] = useState(false)
   const [weatherInfo, setWeatherInfo] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setUserPosition([pos.coords.latitude, pos.coords.longitude])
-      },
-      () => console.warn("Could not get location")
-    )
+    if (navigator.geolocation) {
+      setIsLoading(true)
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setUserPosition([pos.coords.latitude, pos.coords.longitude])
+          setIsLoading(false)
+        },
+        (error) => {
+          console.warn("Could not get location:", error)
+          // Default to India coordinates
+          setUserPosition([20.5937, 78.9629])
+          setIsLoading(false)
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 600000
+        }
+      )
+    }
   }, [])
 
   const toggleLayer = (layer) => {
@@ -78,10 +117,17 @@ const MapView = () => {
   }
 
   const getWeatherIcon = (temp) => {
+    if (typeof temp === 'string' || temp === 'N/A') return "❓"
     if (temp > 25) return "☀️"
     if (temp > 15) return "⛅"
     if (temp > 5) return "☁️"
     return "❄️"
+  }
+
+  const formatValue = (value, suffix = '') => {
+    if (value === 'N/A' || value === null || value === undefined) return 'N/A'
+    if (typeof value === 'number') return `${Math.round(value)}${suffix}`
+    return value
   }
 
   return (
@@ -91,30 +137,44 @@ const MapView = () => {
         center={userPosition}
         zoom={5}
         className="map-container"
+        style={{ height: '100vh', width: '100%' }}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          maxZoom={19}
         />
 
         {activeLayers.temp && (
-          <TileLayer url={`${API_BASE}/tiles/temp_new/{z}/{x}/{y}.png`} />
+          <TileLayer 
+            url={`${API_BASE}/tiles/temp_new/{z}/{x}/{y}.png`}
+            opacity={0.7}
+          />
         )}
         {activeLayers.clouds && (
-          <TileLayer url={`${API_BASE}/tiles/clouds_new/{z}/{x}/{y}.png`} />
+          <TileLayer 
+            url={`${API_BASE}/tiles/clouds_new/{z}/{x}/{y}.png`}
+            opacity={0.7}
+          />
         )}
         {activeLayers.precipitation && (
-          <TileLayer url={`${API_BASE}/tiles/precipitation_new/{z}/{x}/{y}.png`} />
+          <TileLayer 
+            url={`${API_BASE}/tiles/precipitation_new/{z}/{x}/{y}.png`}
+            opacity={0.7}
+          />
         )}
         {activeLayers.wind && (
-          <TileLayer url={`${API_BASE}/tiles/wind_new/{z}/{x}/{y}.png`} />
+          <TileLayer 
+            url={`${API_BASE}/tiles/wind_new/{z}/{x}/{y}.png`}
+            opacity={0.7}
+          />
         )}
 
         <Marker position={userPosition}>
           <Popup className="custom-popup">
             <div className="popup-content">
               <MapPin size={16} />
-              <span>You are here</span>
+              <span>{isLoading ? 'Locating...' : 'You are here'}</span>
             </div>
           </Popup>
         </Marker>
@@ -135,15 +195,15 @@ const MapView = () => {
                 <div className="weather-details">
                   <div className="weather-detail">
                     <Thermometer size={14} />
-                    <span>{Math.round(weatherInfo.temp)}°C</span>
+                    <span>{formatValue(weatherInfo.temp, '°C')}</span>
                   </div>
                   <div className="weather-detail">
                     <Droplets size={14} />
-                    <span>{weatherInfo.humidity}%</span>
+                    <span>{formatValue(weatherInfo.humidity, '%')}</span>
                   </div>
                   <div className="weather-detail">
                     <Wind size={14} />
-                    <span>{Math.round(weatherInfo.wind * 3.6)} km/h</span>
+                    <span>{formatValue(weatherInfo.wind * 3.6, ' km/h')}</span>
                   </div>
                 </div>
               </div>
@@ -218,22 +278,22 @@ const MapView = () => {
           <div className="weather-info-grid">
             <div className="weather-info-item">
               <Thermometer size={16} />
-              <span className="value">{Math.round(weatherInfo.temp)}°C</span>
+              <span className="value">{formatValue(weatherInfo.temp, '°C')}</span>
               <span className="label">Temperature</span>
             </div>
             <div className="weather-info-item">
               <Droplets size={16} />
-              <span className="value">{weatherInfo.humidity}%</span>
+              <span className="value">{formatValue(weatherInfo.humidity, '%')}</span>
               <span className="label">Humidity</span>
             </div>
             <div className="weather-info-item">
               <Wind size={16} />
-              <span className="value">{Math.round(weatherInfo.wind * 3.6)}</span>
+              <span className="value">{formatValue(weatherInfo.wind * 3.6)}</span>
               <span className="label">km/h</span>
             </div>
             <div className="weather-info-item">
               <Gauge size={16} />
-              <span className="value">{Math.round(weatherInfo.lat * 100) / 100}</span>
+              <span className="value">{formatValue(Math.round(weatherInfo.lat * 100) / 100)}</span>
               <span className="label">Latitude</span>
             </div>
           </div>
