@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+
+const API_BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:8000";
+
 const ClimatePredictor = () => {
   const [predictionData, setPredictionData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -15,7 +18,7 @@ const fetchPredictions = async () => {
   setError(null);
 
   try {
-    const response = await fetch(`http://127.0.0.1:8000/predict/${city}`);
+    const response = await fetch(`${API_BASE}/predict/${city}`);
     if (!response.ok) throw new Error("API request failed");
     const data = await response.json();
 

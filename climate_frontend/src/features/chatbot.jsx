@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Trash2, MessageCircle, Zap, Sun, Cloud, Thermometer, MapPin, Settings, X, ChevronDown, Menu, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Chatbot.css';
+const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8000";
+
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([
@@ -69,11 +71,12 @@ const Chatbot = () => {
     try {
       // Enhanced simulation with mode-specific responses
       try {
-        const res = await fetch("http://localhost:8000/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: inputMessage, mode: chatMode })
-        });
+        const res = await fetch(`${API_BASE}/chat`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message: inputMessage, mode: chatMode })
+});
+
         const data = await res.json();
 
         const botMessage = {

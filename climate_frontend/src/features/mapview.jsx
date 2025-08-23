@@ -10,7 +10,7 @@ import "leaflet/dist/leaflet.css"
 import { Sun, Cloud, CloudRain, Wind, ChevronDown, ChevronUp, MapPin, Thermometer, Droplets, Gauge } from "lucide-react"
 import "./MapView.css"
 
-const API_KEY = "d6671a51473de1e27fed731dbd9f5127"
+const API_KEY = process.env.REACT_APP_OPENWEATHER_KEY;
 
 const ClickHandler = ({ setWeatherInfo }) => {
   useMapEvents({
