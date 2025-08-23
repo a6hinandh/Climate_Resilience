@@ -42,7 +42,7 @@ const LandingPage = () => {
     <div className="nav-content">
       <div className="nav-brand">
         <div className="nav-logo">
-          <Shield className="icon-lg icon-blue" />
+          <Shield className="icon-lg icon-blue" style={{color:"black"}} />
           <div className="nav-logo-pulse"></div>
         </div>
         <span className="nav-title">
@@ -379,7 +379,7 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="footer">
+      <footer className="footer" style={{backgroundColor:"black",paddingTop:"1rem",paddingBottom:"1rem"}}>
         <div className="footer-container">
           <div className="footer-grid">
             <div className="footer-brand">

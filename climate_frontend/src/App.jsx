@@ -10,6 +10,7 @@ import Chatbot from './features/chatbot.jsx'
 import MapView from './features/mapview.jsx'
 import CommunityKnowledgeHub from './features/CommunityPage.jsx'
 import ClimateGamesApp from './features/ClimateQuiz.jsx'
+import ScrollToTop from './components/scrollToTop.jsx'
 
 // Component to handle seasonal background based on route
 const SeasonalBackground = () => {
@@ -347,7 +348,7 @@ function App() {
       <div className="app">
         {/* Conditional seasonal background */}
         <SeasonalBackground />
-        
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />

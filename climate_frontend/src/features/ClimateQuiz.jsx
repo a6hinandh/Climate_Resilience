@@ -13,6 +13,10 @@ const ClimateGamesApp = () => {
     }
   }, []);
 
+  useEffect(()=>{
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  },[currentGame])
+
   // Save total score to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('climateQuizTotalScore', totalScore.toString());
@@ -47,7 +51,7 @@ const ClimateGamesApp = () => {
   const HomePage = () => (
     <div className="home-container">
       <div className="hero-section">
-        <h1 className="main-title">🌱 Climate Champions 🌱</h1>
+        <h1 className="main-title" style={{color:"black"}}>🌱 Climate Champions 🌱</h1>
         <p className="subtitle">
           Learn about climate change and environmental protection through engaging interactive games and challenges!
         </p>
@@ -80,7 +84,7 @@ const ClimateGamesApp = () => {
       
       <div className="score-display">
         <div className="score-icon" aria-hidden="true">🏆</div>
-        <div className="score-content">
+        <div className="score-content"style={{marginBottom:"15px"}}>
           <h3>Total Score</h3>
           <div className="score-number" aria-label={`Total score: ${totalScore} points`}>
             {totalScore.toLocaleString()}

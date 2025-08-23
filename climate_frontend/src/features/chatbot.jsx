@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Trash2, MessageCircle, Zap, Sun, Cloud, Thermometer, MapPin, Settings, X, ChevronDown, Menu, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Chatbot.css';
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8000";
+const API_BASE = import.meta.env.VITE_REACT_APP_API_BASE || "http://localhost:8000";
 
 
 const Chatbot = () => {

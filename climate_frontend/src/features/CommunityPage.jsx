@@ -358,7 +358,7 @@ const CommunityKnowledgeHub = () => {
       
       {/* Header */}
       <header className="header">
-        <div className="header-content">
+        <div className="header-content" style={{justifyContent: 'space-between'}}>
           <div className="header-title">
             <div className="header-icon">
               <Users size={24} />

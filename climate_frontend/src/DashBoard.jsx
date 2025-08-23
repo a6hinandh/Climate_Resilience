@@ -88,7 +88,7 @@ const Dashboard = () => {
     if (feature.route && feature.route !== "#") {
       // Add visual feedback
       const card = event.currentTarget;
-      card.style.transform = 'scale(0.95)';
+      
       
       setTimeout(() => {
         navigate(feature.route);
@@ -198,46 +198,9 @@ const Dashboard = () => {
           }}
         >
           👤
-          {dropdownOpen && (
-            <nav className="dropdown-menu" role="menu">
-              <button 
-                className="dropdown-item"
-                onClick={() => handleProfileAction('profile')}
-                role="menuitem"
-              >
-                👤 View Profile
-              </button>
-              <button 
-                className="dropdown-item"
-                onClick={() => handleProfileAction('preferences')}
-                role="menuitem"
-              >
-                ⚙️ Settings & Preferences  
-              </button>
-              <button 
-                className="dropdown-item"
-                onClick={() => handleProfileAction('analytics')}
-                role="menuitem"
-              >
-                📊 Usage Analytics
-              </button>
-              <button 
-                className="dropdown-item"
-                onClick={() => handleProfileAction('notifications')}
-                role="menuitem"
-              >
-                🔔 Notifications
-              </button>
-              <button 
-                className="dropdown-item logout"
-                onClick={handleLogout}
-                role="menuitem"
-              >
-                🚪 Sign Out
-              </button>
-            </nav>
-          )}
+         
         </div>
+        
       </header>
 
       {/* Enhanced Quick Access Banner with Dynamic Content */}
@@ -450,7 +413,47 @@ const Dashboard = () => {
           <span>v2.1.0</span>
         </div>
       </footer>
+       {dropdownOpen && (
+            <nav className="dropdown-menu" >
+              <button 
+                className="dropdown-item"
+                onClick={() => handleProfileAction('profile')}
+                role="menuitem"
+              >
+                👤 View Profile
+              </button>
+              <button 
+                className="dropdown-item"
+                onClick={() => handleProfileAction('preferences')}
+                role="menuitem"
+              >
+                ⚙️ Settings & Preferences  
+              </button>
+              <button 
+                className="dropdown-item"
+                onClick={() => handleProfileAction('analytics')}
+                role="menuitem"
+              >
+                📊 Usage Analytics
+              </button>
+              <button 
+                className="dropdown-item"
+                onClick={() => handleProfileAction('notifications')}
+                role="menuitem"
+              >
+                🔔 Notifications
+              </button>
+              <button 
+                className="dropdown-item logout"
+                onClick={handleLogout}
+                role="menuitem"
+              >
+                🚪 Sign Out
+              </button>
+            </nav>
+          )}
     </div>
+    
   );
 };
 

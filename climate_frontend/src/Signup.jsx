@@ -42,7 +42,7 @@ const Signup = ({ onNavigate }) => {
           <div className="nav-content">
             <div className="nav-brand" onClick={() => navigate('/')}>
               <div className="nav-logo">
-                <Shield className="icon-lg icon-blue" />
+                <Shield className="icon-lg icon-blue" color='black' />
                 <div className="nav-logo-pulse"></div>
               </div>
               <span className="nav-title">Climate Guardian</span>

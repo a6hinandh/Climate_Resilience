@@ -31,7 +31,7 @@ const Login = ({ onNavigate }) => {
           <div className="nav-content">
             <div className="nav-brand" onClick={() => onNavigate('landing')}>
               <div className="nav-logo">
-                <Shield className="icon-lg icon-blue" />
+                <Shield className="icon-lg icon-blue" color='black' />
                 <div className="nav-logo-pulse"></div>
               </div>
               <span className="nav-title">Climate Guardian</span>
@@ -59,8 +59,9 @@ const Login = ({ onNavigate }) => {
           <form className="auth-form" onSubmit={handleSubmit}>
             <div className="form-group">
               <label className="form-label">Email</label>
+             
               <div className="input-wrapper">
-                <Mail className="input-icon" />
+                 <Mail size={20} className="input-icon"/>
                 <input
                   type="email"
                   name="email"
@@ -76,7 +77,7 @@ const Login = ({ onNavigate }) => {
             <div className="form-group">
               <label className="form-label">Password</label>
               <div className="input-wrapper">
-                <Lock className="input-icon" />
+                <Lock className="input-icon"/>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"

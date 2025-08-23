@@ -1,4 +1,4 @@
-/* Enhanced Dashboard Container with Modern Glass Morphism */
+
 .dashboard-container {
   min-height: 100vh;
   
@@ -137,8 +137,8 @@
 /* Enhanced Dropdown Menu */
 .dropdown-menu {
   position: absolute;
-  top: 64px;
-  right: 0;
+  top: 140px;
+  right: 50px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(25px);
   border-radius: 20px;
@@ -148,7 +148,7 @@
     0 0 0 1px rgba(0, 0, 0, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
   min-width: 240px;
-  overflow: hidden;
+
   animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
