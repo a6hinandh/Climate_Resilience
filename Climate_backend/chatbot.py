@@ -1,7 +1,7 @@
 import google.generativeai as genai
+import os
 
-genai.configure(api_key="AIzaSyDFGJGJzxyRuODUoaqzeTtquWGGl99xseE")
-
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 def climate_chatbot(message: str, mode: str = "general"):
     # Add context depending on mode
     if mode == "farmer":

@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+
+# Virtual environments
+.env
+.venv/
+env/
+venv/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Dependency folders
+node_modules/
+
+# FastAPI / Uvicorn
+*.pid
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Environment variables
+*.env
+
+# Build & dist
+dist/
+build/
+*.egg-info/
+
+# Render / deployment cache
+.render/

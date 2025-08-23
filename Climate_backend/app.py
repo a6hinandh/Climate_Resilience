@@ -8,6 +8,9 @@ import requests
 from ai_logic import ai_predict_temp, drought_flood_risk, crop_advisory
 # from chatbot import climate_chatbot   # optional, for chatbot mode
 
+import os
+API_KEY = os.getenv("OPENWEATHER_API_KEY")
+
 app = FastAPI()
 
 app.add_middleware(
@@ -19,7 +22,6 @@ app.add_middleware(
 )
 
 # --- OpenWeather API (fill in later) ---
-API_KEY = "080415763a31217507f960f273f67a7c"
 @app.get("/")
 def root():
     return {"message": "AI Climate Resilience API Running"}
