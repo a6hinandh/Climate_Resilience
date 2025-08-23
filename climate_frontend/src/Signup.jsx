@@ -45,7 +45,7 @@ const Signup = ({ onNavigate }) => {
                 <Shield className="icon-lg icon-blue" color='black' />
                 <div className="nav-logo-pulse"></div>
               </div>
-              <span className="nav-title">Climate Guardian</span>
+              <span className="nav-title">Climorae</span>
             </div>
             
             <div className="nav-links">
@@ -63,7 +63,7 @@ const Signup = ({ onNavigate }) => {
             <div className="auth-icon">
               <Shield className="icon-xl icon-blue" />
             </div>
-            <h1 className="auth-title">Join Climate Guardian</h1>
+            <h1 className="auth-title">Join Climorae</h1>
             <p className="auth-subtitle">Create your account to start protecting your community</p>
           </div>
 

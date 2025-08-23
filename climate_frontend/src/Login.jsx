@@ -34,7 +34,7 @@ const Login = ({ onNavigate }) => {
                 <Shield className="icon-lg icon-blue" color='black' />
                 <div className="nav-logo-pulse"></div>
               </div>
-              <span className="nav-title">Climate Guardian</span>
+              <span className="nav-title">Climorae</span>
             </div>
             
             <div className="nav-links">
@@ -53,7 +53,7 @@ const Login = ({ onNavigate }) => {
               <Shield className="icon-xl icon-blue" />
             </div>
             <h1 className="auth-title">Welcome Back</h1>
-            <p className="auth-subtitle">Sign in to your Climate Guardian account</p>
+            <p className="auth-subtitle">Sign in to your Climorae account</p>
           </div>
 
           <form className="auth-form" onSubmit={handleSubmit}>

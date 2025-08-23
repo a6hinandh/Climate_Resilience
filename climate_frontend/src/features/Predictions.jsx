@@ -414,6 +414,36 @@ const fetchPredictions = async () => {
           gap: 1rem;
         }
 
+        /* City Input Styling - Fixed */
+        .city-input {
+          padding: 0.5rem 0.75rem;
+          border: 2px solid #d1d5db;
+          border-radius: 0.5rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          background: white;
+          color: #374151;
+          outline: none;
+          transition: all 0.2s ease;
+          min-width: 150px;
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .city-input:focus {
+          border-color: #2563eb;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+          background: #fafbff;
+        }
+
+        .city-input:hover {
+          border-color: #9ca3af;
+        }
+
+        .city-input::placeholder {
+          color: #9ca3af;
+          font-style: italic;
+        }
+
         .update-time {
           font-size: 0.875rem;
           color: #6b7280;
@@ -990,6 +1020,13 @@ const fetchPredictions = async () => {
           .nav-right {
             width: 100%;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+          }
+
+          .city-input {
+            min-width: 120px;
+            flex: 1;
           }
 
           .main-content {
@@ -1053,6 +1090,12 @@ const fetchPredictions = async () => {
 
           .rainfall-amount {
             font-size: 2rem;
+          }
+
+          .city-input {
+            min-width: 100px;
+            font-size: 0.8rem;
+            padding: 0.4rem 0.6rem;
           }
         }
       `}</style>
