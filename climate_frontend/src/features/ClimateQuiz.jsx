@@ -150,7 +150,7 @@ const ClimateGamesApp = () => {
       
       let newScore = quizScore;
       if (selectedAnswer === questions[currentQuestion].correct) {
-        newScore = quizScore + 15;
+        newScore = quizScore + 2;
         setQuizScore(newScore);
       }
       
@@ -197,7 +197,7 @@ const ClimateGamesApp = () => {
     };
 
     if (showResult) {
-      const percentage = Math.round((quizScore / (questions.length * 15)) * 100);
+      const percentage = Math.round((quizScore / (questions.length * 2)) * 100);
       return (
         <div className="quiz-container">
           <div className="quiz-result">
@@ -208,7 +208,7 @@ const ClimateGamesApp = () => {
                 <div className="score-big" aria-label={`You scored ${quizScore} points`}>
                   {quizScore}
                 </div>
-                <div className="score-total">/{questions.length * 15}</div>
+                <div className="score-total">/{questions.length * 2}</div>
               </div>
               <div className="percentage">{percentage}% Correct</div>
             </div>
@@ -362,8 +362,7 @@ const ClimateGamesApp = () => {
     useEffect(() => {
       if (matched.length === 16 && matched.length > 0) {
         setGameComplete(true);
-        const bonusScore = Math.max(0, 200 - moves * 3);
-        const finalScore = gameScore + bonusScore;
+        const finalScore = gameScore;
         setGameScore(finalScore);
         setTotalScore(prev => prev + finalScore);
       }
@@ -394,7 +393,7 @@ const ClimateGamesApp = () => {
         setTimeout(() => {
           if (cards[first].pair === cards[second].content || cards[first].content === cards[second].pair) {
             setMatched(prev => [...prev, cards[first].id, cards[second].id]);
-            setGameScore(prev => prev + 25);
+            setGameScore(prev => prev + 2);
           }
           setFlipped([]);
         }, 1200);
