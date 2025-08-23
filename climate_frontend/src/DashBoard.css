@@ -92,7 +92,6 @@
   background-clip: text;
   color: #000000; /* Fallback for browsers that don't support background-clip */
   letter-spacing: -0.03em;
-  text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
   animation: titleGlow 4s ease-in-out infinite alternate;
 }
 
@@ -371,10 +370,16 @@
 }
 
 .features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 24px;
   margin-bottom: 44px;
+  justify-content: center;
+}
+
+.feature-card {
+  flex: 0 0 420px; /* Fixed width matching the minmax from grid */
+  max-width: 400px;
 }
 
 .feature-card {

@@ -46,13 +46,12 @@ const LandingPage = () => {
           <div className="nav-logo-pulse"></div>
         </div>
         <span className="nav-title">
-          Climate Guardian
+          Climorae
         </span>
       </div>
       
       <div className="nav-links">
         <a href="#features" className="nav-link">Features</a>
-        <a href="#demo" className="nav-link">Demo</a>
         <a href="#about" className="nav-link">About</a>
         
         {/* Auth buttons container */}
@@ -143,19 +142,7 @@ const LandingPage = () => {
               </div>
             </div>
             
-            <div className="hero-actions">
-              <button className="hero-primary-btn">
-                Get Started Free
-                <ArrowRight className="hero-btn-icon" />
-              </button>
-              <button 
-                onClick={scrollToDemo}
-                className="hero-secondary-btn"
-              >
-                <Play className="hero-btn-icon-left" />
-                Watch Demo
-              </button>
-            </div>
+            
 
             <div className="hero-trust-indicators">
               <div className="hero-trust-item">
@@ -200,32 +187,48 @@ const LandingPage = () => {
               <div className="feature-icon orange">
                 <Sun className="icon-lg" />
               </div>
-              <h3 className="feature-title">Heatwave Prediction</h3>
-              <p className="feature-description">Advanced AI models predict dangerous heat events 7 days in advance</p>
+              <h3 className="feature-title">AI Chatbot</h3>
+              <p className="feature-description">Get instant climate guidance, crop advice, and weather tips through our intelligent assistant.</p>
             </div>
 
             <div className="feature-card blue">
               <div className="feature-icon blue">
                 <Droplets className="icon-lg" />
               </div>
-              <h3 className="feature-title">Flood Alerts</h3>
-              <p className="feature-description">Real-time monitoring of water levels and precipitation patterns</p>
+              <h3 className="feature-title">AI Predictions</h3>
+              <p className="feature-description">Machine learning models forecast temperature, rainfall, and provide drought/flood risk analysis.</p>
             </div>
 
             <div className="feature-card green">
               <div className="feature-icon green">
                 <Sprout className="icon-lg" />
               </div>
-              <h3 className="feature-title">Drought Monitoring</h3>
-              <p className="feature-description">Satellite data and soil sensors track moisture levels continuously</p>
+              <h3 className="feature-title">Realtime Dashboard</h3>
+              <p className="feature-description">Live weather and air quality data with alerts for extreme conditions, visualized clearly.</p>
             </div>
 
-            <div className="feature-card purple">
-              <div className="feature-icon purple">
+            <div className="feature-card orange">
+              <div className="feature-icon orange">
                 <Bot className="icon-lg" />
               </div>
-              <h3 className="feature-title">AI Dashboard</h3>
-              <p className="feature-description">Intelligent insights and automated recommendations for your area</p>
+              <h3 className="feature-title">Games & Incentives</h3>
+              <p className="feature-description">Learn about climate change through quizzes and challenges while earning rewards and recognition.</p>
+            </div>
+
+            <div className="feature-card blue">
+              <div className="feature-icon blue">
+                <Bot className="icon-lg" />
+              </div>
+              <h3 className="feature-title">Community Hub</h3>
+              <p className="feature-description">A space to share resources, ask questions, and celebrate climate champions driving change.</p>
+            </div>
+
+            <div className="feature-card green">
+              <div className="feature-icon green">
+                <Bot className="icon-lg" />
+              </div>
+              <h3 className="feature-title">Mapview</h3>
+              <p className="feature-description">Interactive maps with weather layers to track temperature, wind, and rainfall patterns.</p>
             </div>
           </div>
         </div>

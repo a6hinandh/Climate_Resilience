@@ -168,7 +168,7 @@ const Dashboard = () => {
       {/* Enhanced Header with Dynamic Greeting */}
       <header className="dashboard-header">
         <div>
-          <h1 className="dashboard-title">🌤️ Climate Intelligence Hub</h1>
+          <h1 className="dashboard-title">Climate Intelligence Hub</h1>
           <p style={{ 
             margin: '8px 0 0 0', 
             color: '#374151', // Changed to dark color

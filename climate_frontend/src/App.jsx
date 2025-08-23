@@ -38,7 +38,7 @@ const SeasonalBackground = () => {
       gradient: 'linear-gradient(135deg, #fff9e6 0%, #fff3cc 15%, #ffe066 30%, #ffd700 45%, #ffb347 60%, #ff8c42 75%, #ff6b42 90%, #ff4500 100%)',
       particleColor: '#ffeb3b',
       particleType: 'sun',
-      particleCount: 1
+      particleCount: 0
     },
     {
       name: 'Monsoon',
@@ -49,7 +49,7 @@ const SeasonalBackground = () => {
     },
     {
       name: 'Autumn',
-      gradient: 'linear-gradient(135deg, #fdf5e6 0%, #f4e4bc 15%, #ccb255ff 30%, #be7c4cff 45%, #ab7c4dff 60%, #ad8b37ff 75%, #c1714bff 90%, #96592eff 100%)',
+      gradient: 'linear-gradient(135deg, #fdf5e6 0%, #f4e4bc 15%, #ccb255ff 30%, #be7c4cff 45%, #ee9841ff 60%, #ad8b37ff 75%, #ff5608ff 90%, #ff6c03ff 100%)',
       particleColor: '#cd3700ff',
       particleType: 'leaves',
       particleCount: 100

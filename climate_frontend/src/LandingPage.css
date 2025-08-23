@@ -222,7 +222,7 @@
 .hero-description {
   font-size: 20px;
   line-height: 1.7;
-  color: #475569;
+  color: #000000;
   margin-bottom: 40px;
   font-weight: 400;
 }
@@ -599,7 +599,6 @@
 
 .features-grid {
   display: grid;
-  grid-template-columns: 1fr;
   gap: 2rem;
 }
 
