@@ -12,7 +12,6 @@ const ClimateDataDashboard = () => {
 
   const API_KEY = import.meta.env.VITE_OPENWEATHER_KEY;
 
-
   const fetchWeatherData = async (city) => {
     try {
       setLoading(true);
@@ -61,7 +60,7 @@ const ClimateDataDashboard = () => {
       data.push({
         time: new Date(Date.now() - i * 60 * 60 * 1000).getHours(),
         temperature: currentTemp + (Math.random() - 0.5) * 10,
-        humidity: currentHumidity + (Math.random() - 0.5) * 20,
+        humidity: Math.max(0, Math.min(100, currentHumidity + (Math.random() - 0.5) * 20)),
         rainfall: Math.random() * 5
       });
     }
@@ -129,27 +128,114 @@ const ClimateDataDashboard = () => {
     return descriptions[aqi] || 'Unknown';
   };
 
-  const SimpleChart = ({ data, dataKey, color, label }) => {
-    const maxValue = Math.max(...data.map(d => d[dataKey]));
-    const minValue = Math.min(...data.map(d => d[dataKey]));
+  const LineChart = ({ data, dataKey, color, label, unit = '' }) => {
+    if (!data || data.length === 0) return null;
+
+    const values = data.map(d => d[dataKey]);
+    const maxValue = Math.max(...values);
+    const minValue = Math.min(...values);
     const range = maxValue - minValue || 1;
     
+    const chartWidth = 800;
+    const chartHeight = 200;
+    const padding = 40;
+    const pointSpacing = (chartWidth - 2 * padding) / (data.length - 1);
+
+    // Create SVG path for the line
+    const pathData = data.map((point, index) => {
+      const x = padding + index * pointSpacing;
+      const y = chartHeight - padding - ((point[dataKey] - minValue) / range) * (chartHeight - 2 * padding);
+      return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
+    }).join(' ');
+
+    // Generate grid lines
+    const gridLines = [];
+    const numGridLines = 5;
+    for (let i = 0; i <= numGridLines; i++) {
+      const y = padding + (i / numGridLines) * (chartHeight - 2 * padding);
+      const value = maxValue - (i / numGridLines) * range;
+      gridLines.push({
+        y,
+        value: value.toFixed(1)
+      });
+    }
+
     return (
       <div className="chart-container">
         <h4>{label}</h4>
-        <div className="chart">
-          {data.map((point, index) => (
-            <div key={index} className="chart-bar">
-              <div 
-                className="bar" 
-                style={{
-                  height: `${((point[dataKey] - minValue) / range) * 100}%`,
-                  backgroundColor: color
-                }}
-              ></div>
-              <span className="bar-label">{point.time}h</span>
-            </div>
-          ))}
+        <div className="line-chart">
+          <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 20}`} preserveAspectRatio="xMidYMid meet">
+            {/* Grid lines */}
+            {gridLines.map((line, index) => (
+              <g key={index}>
+                <line
+                  x1={padding}
+                  y1={line.y}
+                  x2={chartWidth - padding}
+                  y2={line.y}
+                  className="chart-grid"
+                />
+                <text
+                  x={padding - 10}
+                  y={line.y + 4}
+                  className="chart-value"
+                  textAnchor="end"
+                >
+                  {line.value}{unit}
+                </text>
+              </g>
+            ))}
+            
+            {/* X-axis */}
+            <line
+              x1={padding}
+              y1={chartHeight - padding}
+              x2={chartWidth - padding}
+              y2={chartHeight - padding}
+              className="chart-axis"
+            />
+            
+            {/* Y-axis */}
+            <line
+              x1={padding}
+              y1={padding}
+              x2={padding}
+              y2={chartHeight - padding}
+              className="chart-axis"
+            />
+            
+            {/* Data line */}
+            <path
+              d={pathData}
+              className="chart-line"
+              stroke={color}
+            />
+            
+            {/* Data points */}
+            {data.map((point, index) => {
+              const x = padding + index * pointSpacing;
+              const y = chartHeight - padding - ((point[dataKey] - minValue) / range) * (chartHeight - 2 * padding);
+              return (
+                <g key={index}>
+                  <circle
+                    cx={x}
+                    cy={y}
+                    className="chart-point"
+                    stroke={color}
+                  />
+                  {index % 4 === 0 && ( // Show every 4th hour label to avoid crowding
+                    <text
+                      x={x}
+                      y={chartHeight - padding + 20}
+                      className="chart-label"
+                    >
+                      {point.time}h
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+          </svg>
         </div>
       </div>
     );
@@ -262,23 +348,26 @@ const ClimateDataDashboard = () => {
             <div className="trends-section">
               <h3>24-Hour Trends</h3>
               <div className="charts-grid">
-                <SimpleChart 
+                <LineChart 
                   data={historicalData} 
                   dataKey="temperature" 
                   color="#ff6b6b" 
-                  label="Temperature (°C)"
+                  label="Temperature Over Time"
+                  unit="°C"
                 />
-                <SimpleChart 
+                <LineChart 
                   data={historicalData} 
                   dataKey="humidity" 
                   color="#4ecdc4" 
-                  label="Humidity (%)"
+                  label="Humidity Over Time"
+                  unit="%"
                 />
-                <SimpleChart 
+                <LineChart 
                   data={historicalData} 
                   dataKey="rainfall" 
                   color="#45b7d1" 
-                  label="Rainfall (mm)"
+                  label="Rainfall Over Time"
+                  unit="mm"
                 />
               </div>
             </div>
