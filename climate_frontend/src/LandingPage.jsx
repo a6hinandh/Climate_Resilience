@@ -128,7 +128,7 @@ const LandingPage = () => {
             <p className="hero-description">
               Advanced AI and IoT technology deliver real-time climate alerts and forecasts. 
               Protect your community from extreme weather events with intelligent early warning systems 
-              trusted by over 1 million people worldwide.
+              trusted by people worldwide.
             </p>
 
             <div className="hero-stats-inline">
@@ -388,7 +388,7 @@ const LandingPage = () => {
             <div className="footer-brand">
               <div className="footer-brand-header">
                 <Shield className="icon-lg icon-blue-light" />
-                <span className="footer-brand-title">Climate Guardian</span>
+                <span className="footer-brand-title">Climorae</span>
               </div>
               <p className="footer-brand-description">
                 Empowering communities with AI-driven climate intelligence for a more resilient future.
@@ -421,7 +421,7 @@ const LandingPage = () => {
               "Seasons change. Our resilience remains."
             </p>
             <p className="footer-copyright">
-              © 2025 Climate Guardian. Building a safer tomorrow through technology.
+              © 2025 Climorae. Building a safer tomorrow through technology.
             </p>
           </div>
         </div>
