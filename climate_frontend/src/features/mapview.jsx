@@ -18,8 +18,9 @@ const ClickHandler = ({ setWeatherInfo }) => {
       const { lat, lng } = e.latlng
       try {
         const res = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}&units=metric`
-        )
+  `${API_BASE}/weather/coords?lat=${lat}&lon=${lng}`
+)
+
         const data = await res.json()
         setWeatherInfo({
           lat,
@@ -84,22 +85,22 @@ const MapView = () => {
 
         {activeLayers.temp && (
           <TileLayer
-            url={`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${API_KEY}`}
+            url={`${API_BASE}/tiles/temp_new/{z}/{x}/{y}.png`}
           />
         )}
         {activeLayers.clouds && (
           <TileLayer
-            url={`https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${API_KEY}`}
+            url={`${API_BASE}/tiles/clouds_new/{z}/{x}/{y}.png`}
           />
         )}
         {activeLayers.precipitation && (
           <TileLayer
-            url={`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${API_KEY}`}
+            url={`${API_BASE}/tiles/precipitation_new/{z}/{x}/{y}.png`}
           />
         )}
         {activeLayers.wind && (
           <TileLayer
-            url={`https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${API_KEY}`}
+            url={`${API_BASE}/tiles/wind_new/{z}/{x}/{y}.png`}
           />
         )}
 

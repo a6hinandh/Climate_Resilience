@@ -11,6 +11,8 @@ from ai_logic import ai_predict_temp, drought_flood_risk, crop_advisory
 import os
 API_KEY = os.getenv("OPENWEATHER_API_KEY")
 
+from fastapi.responses import StreamingResponse
+
 app = FastAPI()
 
 app.add_middleware(
@@ -54,6 +56,20 @@ def predict(city: str):
         "risk": risk,
         "advisory": advisory
     }
+
+
+@app.get("/weather/coords")
+def weather_coords(lat: float, lon: float):
+    url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_KEY}&units=metric"
+    res = requests.get(url).json()
+    return res
+
+@app.get("/tiles/{layer}/{z}/{x}/{y}.png")
+def weather_tiles(layer: str, z: int, x: int, y: int):
+    url = f"https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.png?appid={API_KEY}"
+    r = requests.get(url, stream=True)
+    return StreamingResponse(r.raw, media_type="image/png")
+
 # ----------- Chatbot Feature (Optional) -----------
 class ChatRequest(BaseModel):
     message: str
