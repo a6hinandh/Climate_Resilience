@@ -11,6 +11,7 @@ import { Sun, Cloud, CloudRain, Wind, ChevronDown, ChevronUp, MapPin, Thermomete
 import "./MapView.css"
 
 const API_KEY = process.env.REACT_APP_OPENWEATHER_KEY;
+const API_BASE = process.env.REACT_APP_API_BASE;
 
 const ClickHandler = ({ setWeatherInfo }) => {
   useMapEvents({
