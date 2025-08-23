@@ -6,21 +6,21 @@ const ClimateGamesApp = () => {
   const [totalScore, setTotalScore] = useState(0);
 
   // Load total score from localStorage on component mount
-  useEffect(() => {
-    const savedScore = localStorage.getItem('climateQuizTotalScore');
-    if (savedScore) {
-      setTotalScore(parseInt(savedScore, 10));
-    }
-  }, []);
+  // useEffect(() => {
+  //   const savedScore = localStorage.getItem('climateQuizTotalScore');
+  //   if (savedScore) {
+  //     setTotalScore(parseInt(savedScore, 10));
+  //   }
+  // }, []);
 
   useEffect(()=>{
     window.scrollTo({ top: 0, behavior: "smooth" });
   },[currentGame])
 
   // Save total score to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('climateQuizTotalScore', totalScore.toString());
-  }, [totalScore]);
+  // useEffect(() => {
+  //   localStorage.setItem('climateQuizTotalScore', totalScore.toString());
+  // }, [totalScore]);
 
   const games = [
     { 
