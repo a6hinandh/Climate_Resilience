@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const API_BASE = import.meta.env.VITE_REACT_APP_API_BASE;
+const API_BASE = process.REACT_APP_API_BASE;
 
 const ClimatePredictor = () => {
   const [predictionData, setPredictionData] = useState(null);

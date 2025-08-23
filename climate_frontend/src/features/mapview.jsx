@@ -22,8 +22,8 @@ L.Icon.Default.mergeOptions({
 });
 
 
-const API_KEY = import.meta.env.VITE_REACT_APP_OPENWEATHER_KEY;
-const API_BASE = import.meta.env.VITE_REACT_APP_API_BASE || "http://127.0.0.1:8000";
+const API_KEY = process.REACT_APP_OPENWEATHER_KEY;
+const API_BASE = process.REACT_APP_API_BASE || "http://127.0.0.1:8000";
 
 const ClickHandler = ({ setWeatherInfo }) => {
   useMapEvents({

@@ -10,7 +10,7 @@ const ClimateDataDashboard = () => {
   const [alerts, setAlerts] = useState([]);
   const [historicalData, setHistoricalData] = useState([]);
 
-  const API_KEY = import.meta.env.VITE_REACT_APP_OPENWEATHER_KEY;
+  const API_KEY = process.REACT_APP_OPENWEATHER_KEY;
 
   const fetchWeatherData = async (city) => {
     try {
