@@ -124,19 +124,8 @@ const fetchPredictions = async () => {
             <button 
               onClick={fetchPredictions}
               disabled={loading}
-              className={`refresh-btn ${loading ? 'loading' : ''}`}
+              className={`refresh-btn ${loading ? 'loading' : '🔄'}`}
             >
-              {loading ? (
-                <div className="btn-content">
-                  <div className="spinner"></div>
-                  <span>Analyzing...</span>
-                </div>
-              ) : (
-                <div className="btn-content">
-                  <span>🔄</span>
-                  <span>Refresh Analysis</span>
-                </div>
-              )}
             </button>
           </div>
         </div>
@@ -193,7 +182,7 @@ const fetchPredictions = async () => {
                   </div>
                   <div className="card-info">
                     <div className="card-label">Current</div>
-                    <div className="card-value">{predictionData.openweather_temp}°C</div>
+                    <div className="card-value">{predictionData.openweather_temp?.toFixed(2)}°C</div>
                   </div>
                 </div>
                 <div className="card-footer">
@@ -210,7 +199,7 @@ const fetchPredictions = async () => {
                   </div>
                   <div className="card-info">
                     <div className="card-label">AI Forecast</div>
-                    <div className="card-value">{predictionData.ai_predicted_temp}°C</div>
+                    <div className="card-value">{predictionData.ai_predicted_temp?.toFixed(2)}°C</div>
                   </div>
                 </div>
                 <div className="card-footer">
@@ -974,6 +963,7 @@ const fetchPredictions = async () => {
           text-align: center;
           color: #6b7280;
           font-size: 0.875rem;
+          gap:100px;
         }
 
         .footer-content p {

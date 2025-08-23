@@ -19,7 +19,7 @@ app.add_middleware(
 )
 
 # --- OpenWeather API (fill in later) ---
-API_KEY = ""
+API_KEY = "080415763a31217507f960f273f67a7c"
 @app.get("/")
 def root():
     return {"message": "AI Climate Resilience API Running"}

@@ -7,9 +7,10 @@ import {
   useMapEvents,
 } from "react-leaflet"
 import "leaflet/dist/leaflet.css"
-import { Sun, Cloud, CloudRain, Wind, ChevronDown, ChevronUp } from "lucide-react"
+import { Sun, Cloud, CloudRain, Wind, ChevronDown, ChevronUp, MapPin, Thermometer, Droplets, Gauge } from "lucide-react"
+import "./MapView.css"
 
-const API_KEY = ""
+const API_KEY = "d6671a51473de1e27fed731dbd9f5127"
 
 const ClickHandler = ({ setWeatherInfo }) => {
   useMapEvents({
@@ -27,6 +28,7 @@ const ClickHandler = ({ setWeatherInfo }) => {
           humidity: data.main.humidity,
           wind: data.wind.speed,
           desc: data.weather[0].description,
+          location: data.name,
         })
       } catch (err) {
         console.error("Failed to fetch weather data:", err)
@@ -37,7 +39,7 @@ const ClickHandler = ({ setWeatherInfo }) => {
 }
 
 const MapView = () => {
-  const [userPosition, setUserPosition] = useState([20, 77]) // default India center
+  const [userPosition, setUserPosition] = useState([20, 77])
   const [activeLayers, setActiveLayers] = useState({
     temp: false,
     clouds: false,
@@ -60,13 +62,20 @@ const MapView = () => {
     setActiveLayers((prev) => ({ ...prev, [layer]: !prev[layer] }))
   }
 
+  const getWeatherIcon = (temp) => {
+    if (temp > 25) return "☀️"
+    if (temp > 15) return "⛅"
+    if (temp > 5) return "☁️"
+    return "❄️"
+  }
+
   return (
-    <div className="relative h-screen w-screen">
+    <div className="map-wrapper">
       {/* MAP */}
       <MapContainer
         center={userPosition}
         zoom={5}
-        style={{ height: "100vh", width: "100vw", zIndex: 0 }}
+        className="map-container"
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -95,127 +104,131 @@ const MapView = () => {
         )}
 
         <Marker position={userPosition}>
-          <Popup>You are here</Popup>
+          <Popup className="custom-popup">
+            <div className="popup-content">
+              <MapPin size={16} />
+              <span>You are here</span>
+            </div>
+          </Popup>
         </Marker>
 
         <ClickHandler setWeatherInfo={setWeatherInfo} />
 
         {weatherInfo && (
           <Marker position={[weatherInfo.lat, weatherInfo.lng]}>
-            <Popup>
-              <div>
-                <strong>{weatherInfo.desc}</strong>
-                <br />
-                🌡 Temp: {weatherInfo.temp}°C
-                <br />
-                💧 Humidity: {weatherInfo.humidity}%
-                <br />
-                🌬 Wind: {weatherInfo.wind} m/s
+            <Popup className="custom-popup weather-popup">
+              <div className="weather-popup-content">
+                <div className="weather-header">
+                  <span className="weather-icon">{getWeatherIcon(weatherInfo.temp)}</span>
+                  <div>
+                    <h4>{weatherInfo.location}</h4>
+                    <p>{weatherInfo.desc}</p>
+                  </div>
+                </div>
+                <div className="weather-details">
+                  <div className="weather-detail">
+                    <Thermometer size={14} />
+                    <span>{Math.round(weatherInfo.temp)}°C</span>
+                  </div>
+                  <div className="weather-detail">
+                    <Droplets size={14} />
+                    <span>{weatherInfo.humidity}%</span>
+                  </div>
+                  <div className="weather-detail">
+                    <Wind size={14} />
+                    <span>{Math.round(weatherInfo.wind * 3.6)} km/h</span>
+                  </div>
+                </div>
               </div>
             </Popup>
           </Marker>
         )}
       </MapContainer>
 
-      {/* COLLAPSIBLE CARD */}
-      <div
-        style={{
-          position: "absolute",
-          top: "20px",
-          right: "20px",
-          zIndex: 9999,
-          background: "white",
-          padding: "16px",
-          borderRadius: "12px",
-          boxShadow: "0px 4px 12px rgba(0,0,0,0.2)",
-          width: "220px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            cursor: "pointer",
-          }}
-          onClick={() => setCollapsed(!collapsed)}
-        >
-          <h3 style={{ fontWeight: "600" }}>Weather Layers</h3>
-          {collapsed ? <ChevronDown /> : <ChevronUp />}
+      {/* WEATHER LAYERS PANEL */}
+      <div className={`weather-panel ${collapsed ? 'collapsed' : ''}`}>
+        <div className="panel-header" onClick={() => setCollapsed(!collapsed)}>
+          <h3>Weather Layers</h3>
+          <div className="collapse-icon">
+            {collapsed ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+          </div>
         </div>
 
-        {!collapsed && (
-          <div style={{ marginTop: "12px" }}>
-            {[
-              { key: "temp", label: "Temperature", icon: <Sun size={18} /> },
-              { key: "clouds", label: "Clouds", icon: <Cloud size={18} /> },
-              {
-                key: "precipitation",
-                label: "Precipitation",
-                icon: <CloudRain size={18} />,
-              },
-              { key: "wind", label: "Wind", icon: <Wind size={18} /> },
-            ].map(({ key, label, icon }) => (
-              <label
-                key={key}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  marginBottom: "8px",
-                  cursor: "pointer",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  {icon} {label}
-                </div>
+        <div className="panel-content">
+          {[
+            { key: "temp", label: "Temperature", icon: <Sun size={18} />, color: "#ff6b35" },
+            { key: "clouds", label: "Clouds", icon: <Cloud size={18} />, color: "#74c0fc" },
+            { key: "precipitation", label: "Precipitation", icon: <CloudRain size={18} />, color: "#339af0" },
+            { key: "wind", label: "Wind", icon: <Wind size={18} />, color: "#69db7c" },
+          ].map(({ key, label, icon, color }) => (
+            <label key={key} className="layer-toggle">
+              <div className="layer-info">
+                <span className="layer-icon" style={{ color }}>
+                  {icon}
+                </span>
+                <span className="layer-label">{label}</span>
+              </div>
+              <div className="toggle-switch">
                 <input
                   type="checkbox"
                   checked={activeLayers[key]}
                   onChange={() => toggleLayer(key)}
                 />
-              </label>
-            ))}
-          </div>
-        )}
+                <span className="slider"></span>
+              </div>
+            </label>
+          ))}
+        </div>
       </div>
 
-      {/* LEGEND (TEMP KEY) */}
+      {/* TEMPERATURE LEGEND */}
       {activeLayers.temp && (
-        <div
-          style={{
-            position: "absolute",
-            bottom: "20px",
-            right: "20px",
-            zIndex: 9999,
-            background: "white",
-            padding: "10px",
-            borderRadius: "8px",
-            boxShadow: "0px 4px 12px rgba(0,0,0,0.2)",
-          }}
-        >
-          <h4 style={{ fontSize: "14px", marginBottom: "6px" }}>Temp (°C)</h4>
-          <div
-            style={{
-              width: "200px",
-              height: "12px",
-              background:
-                "linear-gradient(to right, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000)",
-              borderRadius: "6px",
-            }}
-          />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              fontSize: "12px",
-              marginTop: "4px",
-            }}
-          >
+        <div className="temperature-legend">
+          <div className="legend-header">
+            <Thermometer size={16} />
+            <span>Temperature (°C)</span>
+          </div>
+          <div className="legend-gradient"></div>
+          <div className="legend-labels">
             <span>-30</span>
             <span>0</span>
             <span>30</span>
             <span>50+</span>
+          </div>
+        </div>
+      )}
+
+      {/* WEATHER INFO CARD */}
+      {weatherInfo && (
+        <div className="weather-info-card">
+          <div className="weather-info-header">
+            <span className="weather-info-icon">{getWeatherIcon(weatherInfo.temp)}</span>
+            <div>
+              <h4>{weatherInfo.location}</h4>
+              <p>{weatherInfo.desc}</p>
+            </div>
+          </div>
+          <div className="weather-info-grid">
+            <div className="weather-info-item">
+              <Thermometer size={16} />
+              <span className="value">{Math.round(weatherInfo.temp)}°C</span>
+              <span className="label">Temperature</span>
+            </div>
+            <div className="weather-info-item">
+              <Droplets size={16} />
+              <span className="value">{weatherInfo.humidity}%</span>
+              <span className="label">Humidity</span>
+            </div>
+            <div className="weather-info-item">
+              <Wind size={16} />
+              <span className="value">{Math.round(weatherInfo.wind * 3.6)}</span>
+              <span className="label">km/h</span>
+            </div>
+            <div className="weather-info-item">
+              <Gauge size={16} />
+              <span className="value">{Math.round(weatherInfo.lat * 100) / 100}</span>
+              <span className="label">Latitude</span>
+            </div>
           </div>
         </div>
       )}

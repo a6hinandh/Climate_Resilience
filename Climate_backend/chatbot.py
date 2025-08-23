@@ -1,6 +1,6 @@
 import google.generativeai as genai
 
-genai.configure(api_key="")
+genai.configure(api_key="AIzaSyDFGJGJzxyRuODUoaqzeTtquWGGl99xseE")
 
 def climate_chatbot(message: str, mode: str = "general"):
     # Add context depending on mode
