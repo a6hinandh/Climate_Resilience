@@ -9,9 +9,21 @@ import {
 import "leaflet/dist/leaflet.css"
 import { Sun, Cloud, CloudRain, Wind, ChevronDown, ChevronUp, MapPin, Thermometer, Droplets, Gauge } from "lucide-react"
 import "./MapView.css"
+import L from "leaflet";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
+
 
 const API_KEY = process.env.REACT_APP_OPENWEATHER_KEY;
-const API_BASE = process.env.REACT_APP_API_BASE;
+const API_BASE = process.env.REACT_APP_API_BASE || "http://127.0.0.1:8000";
 
 const ClickHandler = ({ setWeatherInfo }) => {
   useMapEvents({
@@ -85,24 +97,16 @@ const MapView = () => {
         />
 
         {activeLayers.temp && (
-          <TileLayer
-            url={`${API_BASE}/tiles/temp_new/{z}/{x}/{y}.png`}
-          />
+          <TileLayer url={`${API_BASE}/tiles/temp_new/{z}/{x}/{y}.png`} />
         )}
         {activeLayers.clouds && (
-          <TileLayer
-            url={`${API_BASE}/tiles/clouds_new/{z}/{x}/{y}.png`}
-          />
+          <TileLayer url={`${API_BASE}/tiles/clouds_new/{z}/{x}/{y}.png`} />
         )}
         {activeLayers.precipitation && (
-          <TileLayer
-            url={`${API_BASE}/tiles/precipitation_new/{z}/{x}/{y}.png`}
-          />
+          <TileLayer url={`${API_BASE}/tiles/precipitation_new/{z}/{x}/{y}.png`} />
         )}
         {activeLayers.wind && (
-          <TileLayer
-            url={`${API_BASE}/tiles/wind_new/{z}/{x}/{y}.png`}
-          />
+          <TileLayer url={`${API_BASE}/tiles/wind_new/{z}/{x}/{y}.png`} />
         )}
 
         <Marker position={userPosition}>
